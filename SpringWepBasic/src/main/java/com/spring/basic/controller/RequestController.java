@@ -42,7 +42,7 @@ public class RequestController {
 	return "request/req-ex01";
 	}
 	
-//	@RequestMapping(value="/request/basic01", method = RequestMethod.POST)
+//	@RequestMapping(value="/request/basic01", method = RequestMethod.POST) 원형
 	@PostMapping("/basic01")
 	public String basicPost() {
 	System.out.println("/basic01 요청이 들어옴!: POST 방식");
