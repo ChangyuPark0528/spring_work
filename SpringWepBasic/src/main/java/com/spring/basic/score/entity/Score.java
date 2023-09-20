@@ -33,16 +33,17 @@ public class Score {
 	private Grade grade; //학점
 	
 	public Score(ScoreRequestDTO dto) {
-		this.stuName = dto.getName();
-		changeScore(dto);
+		this.stuName = dto.getName(); //dto중 이름을 stuName으로 값을 집어넣음
+		changeScore(dto); 
 	}
+	//changeScore의 메서드의 값을 dto에 대입함으로 Score의 메서드는 학생이름, 국영수 점수, 총점, 평균, 학점을 얻을 수 있다. 학번은 DB에서 끌어올예정
 	
-	 public void changeScore(ScoreRequestDTO dto) {
-	        this.kor = dto.getKor();
+	 public void changeScore(ScoreRequestDTO dto) { //changeScore의 메서드생성 각 국영수 + 총점의 평균 + 학점 의 값을 dto에 대입해 초기화함.
+	        this.kor = dto.getKor(); 
 	        this.eng = dto.getEng();
 	        this.math = dto.getMath();
-	        calcTotalAndAvg(); // 총점, 평균 계산
-	        calcGrade(); // 학점 계산
+	        calcTotalAndAvg(); // 총점, 평균 계산 // 62행의 메서드실행. 후 다시 45행으로이동.(본인의 메서드)
+	        calcGrade(); // 학점 계산 //48행의 메서드 실행 후 값을 Grade의 값을 얻음.
 	    }
 
 	    private void calcGrade() {

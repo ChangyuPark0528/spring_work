@@ -27,7 +27,7 @@
 		 -> 응답은 HTML로 표현.
 		 EL표현식이 서버에서 먼저 평가되고 그 결과를 클라이언트에게 전달하여 브라우저로 표현하기 때문에
 		 script에서도 el표현이 가능합니다.
-		 javaScript에서 EL 표현식을 작성할때는 문자열로 달러괄호 를 감싸주세요.
+		 javaScript에서 EL 표현식을 작성할때는 문자열로 달러괄호(32행) 를 감싸주세요.
 		*/	
 		const result = '${result}';
 		//console.log('result: ' + result);
