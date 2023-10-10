@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.spring.basic.board.entity.Board;
 
-public interface IBoardMapper {
+public interface IBoardMapper { //작성할 때 sql을 생각하면 추상메서드를 작성하기가 수월하다
 	
 	//게시글 등록
 	void insertArticle(Board board);

@@ -48,6 +48,7 @@
      -->
 		
 	<mybatis-spring:scan base-package="com.spring.basic.score.repository"/>
+	<mybatis-spring:scan base-package="com.spring.basic.board.repository"/>
 	
 			
 </beans>
