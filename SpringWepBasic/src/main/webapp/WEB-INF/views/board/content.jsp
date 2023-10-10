@@ -16,7 +16,7 @@
 	</p>
 	
 	<a href="/basic/board/list">글 목록 보기</a>
-	<a href="/basic/board/modyfy?boardNo=${article.boardNo}">글 수정 하기</a>
+	<a href="/basic/board/modify?boardNo=${article.boardNo}">글 수정 하기</a>
 	
 </body>
 </html>

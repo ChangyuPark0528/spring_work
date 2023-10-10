@@ -28,7 +28,7 @@
 		UPDATE jdbc_board
 		SET writer = #{writer},
 		title = #{title},
-		content = #{content},
+		content = #{content}
 		WHERE board_no = #{boardNo}
 	</update>
 	

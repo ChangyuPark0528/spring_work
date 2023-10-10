@@ -58,9 +58,10 @@ public class BoardController {
 //	}
 	
 	@GetMapping("/modify")
-	public void modify(int boardNo, Model model) {
+	public String modify(int boardNo, Model model) {
 		System.out.println("/board/modify?boardNo=" + boardNo);
 		retrieve(boardNo, model);
+		return "board/modify";
 	}
 	
     //modify.jsp를 생성해서, form태그에 사용자가 처음에 작성했던 내용이 드러나도록
