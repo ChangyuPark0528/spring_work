@@ -12,7 +12,14 @@
 	
 	<select id="getList" resultType="freeboard">
 		SELECT * FROM freeboard
+		ORDER BY bno DESC
 	</select>
+	
+	<select id="getTotal" resultType="int">
+		SELECT COUNT(*)
+		FROM freeboard
+	</select>
+	
 	
 	<select id="getContent" resultType="freeboard">
 		SELECT * FROM freeboard
@@ -26,7 +33,6 @@
 		update_date = sysdate
 		WHERE bno = #{bno}
 	</update>
-	
 	
 	<delete id="delete">
 		DELETE FROM freeboard
