@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.spring.myweb.freeboard.dto.FreeDetailResponseDTO;
-import com.spring.myweb.freeboard.dto.FreeModifyRequestDTO;
-import com.spring.myweb.freeboard.dto.FreeRegistRequestDTO;
+import com.spring.myweb.freeboard.dto.page.Page;
+import com.spring.myweb.freeboard.dto.page.PageCreator;
+import com.spring.myweb.freeboard.dto.request.FreeModifyRequestDTO;
+import com.spring.myweb.freeboard.dto.request.FreeRegistRequestDTO;
+import com.spring.myweb.freeboard.dto.response.FreeDetailResponseDTO;
 import com.spring.myweb.freeboard.service.IFreeBoardService;
 
 import lombok.RequiredArgsConstructor;
@@ -21,11 +23,25 @@ public class FreeBoardController {
 	
 	private final IFreeBoardService service;
 	
-	//목록 화면
+	//페이징이 들어간 목록 화면
 	@GetMapping("/freeList") // get매핑으로 전달
-	public void freeList(Model model) { //freeList메서드를 호출하면서  모델 객체를 불러온다.
+	public void freeList(Page page, Model model) { //Page,Model 객체를 사용하기위해 매개값전달.
 		System.out.println("/freeboard/freeList: GET!");
-		model.addAttribute("boardList", service.getList()); //서비스 클래스에서
+		
+		PageCreator creator;
+		
+		int totalCount = service.getTotal(page); //검색했을때 없는 값이나오면 첫페이지를 보여주기 위한 코드 (if문까지)
+		if(totalCount == 0) {
+			page.setKeyword(null);
+			page.setCondition(null);
+			creator = new PageCreator(page, service.getTotal(page));
+			model.addAttribute("msg", "searchFail");
+		}else {
+			creator = new PageCreator(page, totalCount);
+		}
+		
+		model.addAttribute("boardList", service.getList(page)); 
+		model.addAttribute("pc", creator);
 	}
 	
 	//글 쓰기 페이지를 열어주는 메서드
@@ -43,7 +59,9 @@ public class FreeBoardController {
 	
 	//글 상세보기
 	@GetMapping("/content")
-	public String getContent(int bno, Model model) {
+	public String getContent(int bno, 
+							Model model,
+							@ModelAttribute("p") Page page) { //@ModelAttribute("p") Page page -> 객체안에 바로 주입하기위해 사용 (jsp에서 사용하기위해)
 		model.addAttribute("article",service.getContent(bno));
 		return "freeboard/freeDetail";
 	}
