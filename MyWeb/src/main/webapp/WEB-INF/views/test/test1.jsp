@@ -31,8 +31,8 @@
 
          //querySelectorAll의 리턴값은 NodeList라는 유사 배열 형태
          //배열의 메서드를 사용하기 위해 실제 배열을 반환하는 문법.
-         [... $hobby].forEach($check => {
-            if($check.$checked){
+         [...$hobby].forEach($check => {
+            if($check.checked){
                arr.push($check.value);
             }
          });
@@ -54,7 +54,7 @@
             c. PUT - 수정
             d. DELETE - 삭제
          */
-         xhr.open('POST','/myweb/rest/getObject');
+         xhr.open('POST','/myweb/rest/object');
 
          //3. 서버로 전송할 데이터를 제작합니다.
          //제작하는 데이터의 형식은 JSON 형태여야 합니다.
