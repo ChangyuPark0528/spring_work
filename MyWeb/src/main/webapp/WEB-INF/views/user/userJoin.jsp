@@ -10,7 +10,7 @@
                     <div class="titlebox">
                        	 회원가입
                     </div>
-                    <form action="/myweb/user/join" method="post" name="joinForm">
+                    <form action="${pageContext.request.contextPath}/user/join" method="post" name="joinForm">
                         <div class="form-group"><!--사용자클래스선언-->
                             <label for="id">아이디</label>
                             <div class="input-group"><!--input2탭의 input-addon을 가져온다 -->
@@ -56,8 +56,6 @@
                                     <option>@naver.com</option>
                                     <option>@daum.net</option>
                                     <option>@gmail.com</option>
-                                    <option>@hanmail.com</option>
-                                    <option>@yahoo.co.kr</option>
                                 </select>
                                 <div class="input-group-addon">
                                     <button type="button" class="btn btn-primary" id="mail-check-btn">이메일 인증</button>
@@ -130,7 +128,7 @@
             const xhr = new XMLHttpRequest();
 
             //서버 요청 정보 설정
-            xhr.open('GET', `/myweb/user/\${userId}`);
+            xhr.open('GET', `${pageContext.request.contextPath}/user/\${userId}`);
             xhr.send();
 
             xhr.onload = function() {
@@ -155,7 +153,7 @@
             
            
             //fetch('url', {요청 관련 정보를 담은 객체(GET방식에서는 따로 전달 안함.)})
-            fetch('/myweb/user/' + userId)
+            fetch('${pageContext.request.contextPath}/user/' + userId)
             //Promise 객체의 상태가 요청 성공일 시 데이터 후속 처리 진행.
             .then(res => {
                 //fetch 함수를 통해 비동기 통신이 실행되고,
@@ -180,14 +178,14 @@
 
             //비동기 요청을 fetch()로 보내고 결과를 확인하기.
             //화살표 함수 내의 코드가 한 줄이고, 그것이 return이라면 괄호와 return 생략 가능
-            fetch('/myweb/user/id/' + userId)
+            fetch('${pageContext.request.contextPath}/user/id/' + userId) // 116행에 선언한 17행의 input id의 value. 
             .then(res => res.text()) //요청 완료 후 응답 정보에서 텍스트 데이터가 담긴 Promise 반환. / 비동기통신의 특성을 제어, then함수가 실행되면 다음로직 실행 
             .then(data => { //텍스트 데이터만 담긴 Promise 객체로부터 data를 전달받음.
                 if(data === 'ok') {
                     //더 이상 아이디를 작성할 수 없도록 막아주겠다.
                     document.getElementById('userId').setAttribute('readonly', true);
                     //더 이상 버튼을 누를 수 없도록 버튼 비활성화.
-                    document.getElementById('idCheckBtn').setAttribute('disabled', true);
+                    document.getElementById('idCheckBtn').setAttribute('disabled', true); //disabled: 버튼을 얼림
                     //메세지 남기기
                     document.getElementById('msgId').textContent = '사용 가능한 아이디 입니다.';
                 } else {
@@ -205,18 +203,16 @@
             const email = document.getElementById('userEmail1').value + document.getElementById('userEmail2').value;
             console.log('완성된 email:', email);
             
-            fetch('/myweb/user/email', {
+            fetch('${pageContext.request.contextPath}/user/email', { // promise 
                 method:'post',
-                headers: {
-                    'Content-Type': 'text/plain'
-                },
+                headers: {'Content-Type': 'text/plain'},
                 body: email
             })
             .then(res => res.text())
             .then(data => {
                 console.log('인증번호: ', data);
                 //비활성화된 인증번호 입력창을 활성화
-                document.querySelector('.mail-check-input').disabled = false;
+                document.querySelector('.mail-check-input').disabled = false; // disabled = false; 입력란 사용가능으로 변경 
                 code = data; //서버가 전달한 인증 번호를 
                 alert('인증번호가 전송되었습니다. 확인 후 입력란에 정확히 입력하세요.');
         })
@@ -227,8 +223,7 @@
     }; //이메일 인증 버튼 클릭 이벤트 끝
 
     //인증번호 검증
-    //bulr -> focus가 벗어나는 경우 발생.
-    document.querySelector('.mail-check-input').onblur = function(e){
+    document.querySelector('.mail-check-input').onblur = function(e){ //onbulr -> focus가 벗어나는 경우 발생.
         // console.log('bulr 이벤트 발생 확인')
         const inputCode = e.target.value; // 사용자가 입력한 인증번호
         const $resultMsg = document.getElementById('mail-check-warn'); //span
@@ -317,14 +312,6 @@
             alert('아이디와 비밀번호를 다시 확인해주세요.');
         }
     }
-
-
-
-
-
-
-
-
 
 
         /*아이디 형식 검사 스크립트*/

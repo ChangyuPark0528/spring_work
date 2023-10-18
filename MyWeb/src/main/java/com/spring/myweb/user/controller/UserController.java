@@ -1,5 +1,7 @@
 package com.spring.myweb.user.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.spring.myweb.user.dto.userJoinRequestDTO;
+import com.spring.myweb.user.dto.UserJoinRequestDTO;
 import com.spring.myweb.user.service.UserService;
 import com.spring.myweb.util.MailSenderService;
 
@@ -44,7 +46,7 @@ public class UserController {
 	public String idCheck(@PathVariable String account) {
 		System.out.println("클라이언트로 부터 전달된 아이디: " + account);
 		int result = service.idCheck(account);
-		if(result == 1)return "duplicated";
+		if(result == 1)return "duplicated"; //리턴된 아이디 수 가 있다면 1("duplicated") 없으면 0("ok")
 		else return "ok";
 	}
 	
@@ -60,7 +62,7 @@ public class UserController {
 	
 	
 	@PostMapping("/join")
-	public String join(userJoinRequestDTO dto, RedirectAttributes ra) {
+	public String join(UserJoinRequestDTO dto, RedirectAttributes ra) {
 		service.join(dto);
 		/*
 		 redirect 상황에서 model 객체를 사용하면 데이터가 제대로 전달되지 않습니다.
@@ -83,7 +85,16 @@ public class UserController {
 	//로그인 요청
 	@PostMapping("/userLogin")
 	public void login(String userId, String userPw, Model model) {
-		service.login(userId);
+		System.out.println("나는 UserController의 login이다.");
+		model.addAttribute("result", service.login(userId, userPw));
+	}
+	
+	//마이페이지 이동
+	@GetMapping("/userMypage")
+	public void userMypage(HttpSession session, Model model) {
+		//마이페이지는 로그인한 사람만 이동가능 -> 세션에 아이디가 있다!
+		String id = (String) session.getAttribute("login");
+		model.addAttribute("userInfo", service.getInfo(id));
 	}
 	
 	

@@ -1,7 +1,5 @@
 package com.spring.myweb.user.dto;
 
-import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -16,7 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class userJoinRequestDTO {
+public class UserJoinRequestDTO {
 	
 	private String userId;
 	private String userPw;
