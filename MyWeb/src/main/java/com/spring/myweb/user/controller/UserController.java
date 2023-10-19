@@ -41,7 +41,7 @@ public class UserController {
     {}안에 변수명을 지어주시고, @PathVariable 괄호 안에 영역을 지목해서
     값을 받아옵니다.
     */
-	@GetMapping("/id/{account}")
+	@GetMapping("/id/{account}")  //@PathVariable을 사용해 {account}에는 사용자가 입력한 아이디값이 전달됨.
 	@ResponseBody // 뷰를 통해전달하는것이아닌 데이터 자체를 클라이언트에게 전달하기때문에 @ResponseBody 사용함
 	public String idCheck(@PathVariable String account) {
 		System.out.println("클라이언트로 부터 전달된 아이디: " + account);
