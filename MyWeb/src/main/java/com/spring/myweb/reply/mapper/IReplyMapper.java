@@ -39,5 +39,5 @@ public interface IReplyMapper {
 	void update(Reply reply);
 	
 	//댓글 삭제
-	void delete(int bno);
+	void delete(int rno);
 }

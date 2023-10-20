@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.spring.myweb.reply.dto.ReplyListResponseDTO;
 import com.spring.myweb.reply.dto.ReplyRegistDTO;
+import com.spring.myweb.reply.dto.ReplyUpdateRequestDTO;
 import com.spring.myweb.reply.entity.Reply;
 
 public interface IReplyService {
@@ -21,8 +22,8 @@ public interface IReplyService {
 	String pwCheck(int rno);
 	
 	//댓글 수정
-	void update(Reply reply);
+	String update(ReplyUpdateRequestDTO dto);
 	
 	//댓글 삭제
-	void delete(int bno);
+	String delete(int rno, String replyPw);
 }

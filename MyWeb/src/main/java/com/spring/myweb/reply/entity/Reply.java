@@ -41,7 +41,7 @@ public class Reply {
 	private String replyWriter;
 	private String replyPw;
 	private LocalDateTime replyDate;
-	private LocalDateTime replyUpdateDate;
+	private LocalDateTime UpdateDate;
 	
 	
 }
