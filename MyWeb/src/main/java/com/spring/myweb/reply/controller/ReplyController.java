@@ -69,10 +69,8 @@ public class ReplyController {
 	//댓글 수정 요청
 	@PutMapping("/{rno}")
 	public String update(@PathVariable int rno, @RequestBody ReplyUpdateRequestDTO dto ) {
-			dto.setReplyNo(rno);
-			service.update(dto);
-		
-		return null;
+		dto.setReplyNo(rno);
+		return service.update(dto);
 	}
 	
 	//댓글 삭제 요청

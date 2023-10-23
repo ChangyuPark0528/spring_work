@@ -349,8 +349,8 @@
             } //end update event
 
 
- //삭제 이벤트
- document.getElementById('modalDelBtn').onclick = () => {
+            //삭제 이벤트
+            document.getElementById('modalDelBtn').onclick = () => {
                 /*
                 1. 모달창에 rno값, replyPw 값을 얻습니다.
 
@@ -395,10 +395,6 @@
                         document.getElementById('modalPw').focus();
                     }
                 });
-
-
-
-
 
             } //end delete event
 
