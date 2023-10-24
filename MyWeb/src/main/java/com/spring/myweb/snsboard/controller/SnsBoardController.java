@@ -4,14 +4,20 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,11 +27,13 @@ import com.spring.myweb.snsboard.dto.SnsBoardResponseDTO;
 import com.spring.myweb.snsboard.service.SnsBoardService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @RestController
 @RequestMapping("/snsboard")
 @RequiredArgsConstructor
+@Slf4j
 public class SnsBoardController {
 	
 	private final SnsBoardService service;
@@ -51,7 +59,8 @@ public class SnsBoardController {
 	//글 목록 요청
 	@GetMapping("/{page}")
 	public List<SnsBoardResponseDTO> getList(@PathVariable int page) {
-		System.out.println("/snsboard/getList: GET!");
+//		System.out.println("/snsboard/getList: GET!");
+		log.info("/snsboard/getList: GET!");
 		return service.getList(page);
 	}
 	
@@ -65,8 +74,11 @@ public class SnsBoardController {
 	
 	@GetMapping("/display/{fileLoca}/{fileName}")
 	public ResponseEntity<?> getImge(@PathVariable String fileLoca, @PathVariable String fileName) {
-		System.out.println("fileLoca: " + fileLoca);
-		System.out.println("fileName: " + fileName);
+//		System.out.println("fileLoca: " + fileLoca);
+//		System.out.println("fileName: " + fileName);
+		log.info("fileLoca: " + fileLoca);
+		log.info("fileName: {}", fileName);
+		
 		
 		File file = new File("C:/test/upload/" + fileLoca + "/" + fileName);
 		System.out.println(file.toString()); // 완성된 경로.
@@ -134,7 +146,42 @@ public class SnsBoardController {
 	}
 	
 	//상세보기
-//	@GetMapping("/content/{bno}")
+	@GetMapping("/content/{bno}")
+	public ResponseEntity<?> getContent(@PathVariable int bno) {
+		return ResponseEntity.ok().body(service.getContent(bno)); //데이터 body 속성은 headers 담아 보냄.
+	} //RestController에서는 일반 데이터만 보내는것이 아니라 ResponseEntity객체를 활용 하여 상태와 데이터를 같이보냄.(권장)
+	
+	//글 삭제
+	@DeleteMapping("/{bno}")
+	   public ResponseEntity<?> delete(@PathVariable int bno, HttpSession session) {
+	      
+	      String id = (String) session.getAttribute("login");
+	      SnsBoardResponseDTO dto = service.getContent(bno);
+	      
+	      if(id == null || !id.equals(dto.getWriter())) {
+	    	 //return "noAuth";
+	         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+	      } 
+	      
+	      service.delete(bno);
+	      
+	      //글이 삭제되었다면 더이상 이미지도 존재할 필요가 없으므로
+	      //이미지도 함께 삭제해주셔야 합니다.
+	      //File 객체 생성 -> 생성자에게 지우고자 하는 파일의 경로 지정
+	      //메서드 delete() -> return type이 boolean. 삭제 성공 시 true, 실패 시 false
+	      
+	      File file = new File(dto.getUploadPath() + dto.getFileLoca() + "/" + dto.getFileName());
+	      //return file.delete() ? "success" : "fail"; 
+	      return file.delete() ? ResponseEntity.status(HttpStatus.OK).build()
+	                     : ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	   }
+	
+	@PostMapping("/like")
+	public String likeConfirm(@RequestBody Map<String, String> params) {
+		log.info("/like: POST, params: {}", params);
+		
+		return service.searchLike(params);
+	}
 	
 }
 
